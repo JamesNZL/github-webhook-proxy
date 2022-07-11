@@ -45,5 +45,5 @@ export default async function webhook(req: NextApiRequest, res: NextApiResponse)
     body: JSON.stringify(req.body),
   });
 
-  res.status(webhookResponse.status).end();
+  res.status(webhookResponse.status).send(await webhookResponse.text());
 }
