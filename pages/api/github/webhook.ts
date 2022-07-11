@@ -39,7 +39,7 @@ export default async function webhook(req: NextApiRequest, res: NextApiResponse)
     return [[header, reqHeader]];
   });
 
-  const webhookResponse = await fetch(webhookUrl, {
+  const webhookResponse = await fetch(webhookUrl.replace(/(\/github\/?)?$/, '/github'), {
     method: 'POST',
     headers: Object.fromEntries(githubHeaders),
     body: JSON.stringify(req.body),
