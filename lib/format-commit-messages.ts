@@ -48,8 +48,8 @@ function fixTruncatedInlineCode(message: string) {
 
   if (!isMissingClosingBacktick) return message;
 
-  // add ellipsis and close the last backtick
-  return message.replace(discordTruncatedMessage, discordTruncatedMessage.replace(/(.{4})$/, '...``$1'));
+  // close the last backtick
+  return message.replace(discordTruncatedMessage, discordTruncatedMessage.replace(/(.{1})$/, '``$1'));
 }
 
 /**
