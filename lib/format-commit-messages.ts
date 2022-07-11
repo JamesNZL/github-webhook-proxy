@@ -52,7 +52,10 @@ function fixTruncatedInlineCode(message: string) {
 
   if (!isMissingClosingBacktick) return message;
 
-  const fixedTruncatedMessage = discordTruncatedMessage.replace(/(.{1})$/, '``$1');
+  const fixedTruncatedMessage = (/`$/.test(discordTruncatedMessage))
+    // if the unclosed backtick is the very last character, push it back with a space
+    ? discordTruncatedMessage.replace(/(.)$/, ' $1')
+    : discordTruncatedMessage.replace(/(.)$/, '``$1');
 
   // close the last backtick
   return message.replace(discordTruncatedMessage, fixedTruncatedMessage);
