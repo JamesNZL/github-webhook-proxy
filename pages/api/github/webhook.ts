@@ -11,6 +11,10 @@ const GITHUB_WEBHOOK_HEADERS = [
 ];
 
 export default async function webhook(req: NextApiRequest, res: NextApiResponse) {
+  if (req.method !== 'POST') {
+    return res.status(405).json({ error: 'You must POST to this endpoint.' });
+  }
+
   const webhookUrl = req.query.webhook_url;
 
   if (!webhookUrl) {
