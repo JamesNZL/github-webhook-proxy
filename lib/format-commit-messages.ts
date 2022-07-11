@@ -67,8 +67,8 @@ export function formatCommitMessages(body: NextApiRequest['body']) {
   if (!hasCommits(body)) return body;
 
   body.commits.map(commit => {
-    commit.message = fixTruncatedInlineCode(commit.message);
     commit.message = resolveGitmojiToEmoji(commit.message);
+    commit.message = fixTruncatedInlineCode(commit.message);
     return commit;
   });
 
