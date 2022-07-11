@@ -1,5 +1,7 @@
 import type { NextApiRequest } from 'next';
 
+import { resolveGitmojiCode } from './resolve-gitmoji-code';
+
 interface HasCommits {
   commits: Commit[];
 }
@@ -40,6 +42,12 @@ export function formatCommitMessages(body: NextApiRequest['body']) {
   body.commits.map(commit => {
     // remove inline code backticks
     commit.message = commit.message.replace(/`/g, '');
+
+    // resolve gitmoji codes to the emoji itself (reduce characters)
+    const gitmojiCode = commit.message.match(/(:[\w_]+:)/)?.[1];
+    if (!gitmojiCode) return commit;
+
+    commit.message = commit.message.replace(gitmojiCode, resolveGitmojiCode(gitmojiCode));
 
     return commit;
   });
