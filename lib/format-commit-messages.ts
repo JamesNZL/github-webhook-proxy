@@ -46,7 +46,7 @@ function fixTruncatedInlineCode(message: string) {
     ? MAX_DISCORD_COMMIT_MESSAGE_LENGTH - '...'.length
     : MAX_DISCORD_COMMIT_MESSAGE_LENGTH;
 
-  // use use Array.from() to 'properly' count emojis
+  // use Array.from() to 'properly' count emojis
   // Discord doesn't address grapheme groups, so we won't
   const discordTruncatedMessage = Array.from(message).slice(0, truncatedMessageLength).join('');
   // missing opening backtick if uneven count
