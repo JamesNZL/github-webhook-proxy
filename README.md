@@ -1,6 +1,28 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+## GitHub–Discord Webhook Proxy
 
-## Getting Started
+This is a proxy to sit between GitHub and Discord, built with [Next.js](https://nextjs.org/) API routes.
+
+Discord truncates commit messages to a length of ~`50` characters, which often cuts off closing backticks in commit messages.
+> This is probably dependent on username length, but it works for me :shrug:
+
+Currently, this proxy applies the following transformations to commit messages:
+1. At the [`MAX_DISCORD_COMMIT_MESSAGE_LENGTH`](lib/format-commit-messages.ts), insert a closing `...\`` if there is an uneven number of preceeding backticks.
+2. Replace recognised [gitmoji](https://github.com/carloscuesta/gitmoji/blob/master/src/data/gitmojis.json) codes (eg `:technologist:` 👨‍💻) with the actual emoji character.
+	> Discord does their message truncation calculations on the gitmoji code (but the actual emojis are rendered in the embed), which means long gitmoji codes result in lots of wasted space.
+
+### Before
+![Before](public/before.jpg)
+
+### After
+![After](public/after.jpg)
+
+## Usage
+
+See [Deploy on Vercel](#deploy-on-vercel) if you want to deploy your own proxy instance.
+
+If you'd like to use my instance, simply configure your GitHub webhook URL to `github.jamesnzl.xyz/api/github/webhook?webhook_url=<DISCORD WEBHOOK URL>`.
+
+## Running Locally
 
 First, run the development server:
 
@@ -10,22 +32,7 @@ npm run dev
 yarn dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
-
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
-
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+Once the server is started, use a service such as [Ngrok](https://ngrok.com/) to expose your localhost for testing.
 
 ## Deploy on Vercel
 

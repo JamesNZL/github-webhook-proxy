@@ -1,6 +1,7 @@
 {
 	"conventionalCommits.scopes": [
 		"lint",
-		"deps"
+		"deps",
+		"readme"
 	]
 }
