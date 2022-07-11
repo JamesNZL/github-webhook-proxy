@@ -42,7 +42,11 @@ function hasCommits(body: NextApiRequest['body']): body is HasCommits {
 function fixTruncatedInlineCode(message: string) {
   const MAX_DISCORD_COMMIT_MESSAGE_LENGTH = 50;
 
-  const discordTruncatedMessage = message.slice(0, MAX_DISCORD_COMMIT_MESSAGE_LENGTH);
+  const truncatedMessageLength = (message.length > MAX_DISCORD_COMMIT_MESSAGE_LENGTH)
+    ? MAX_DISCORD_COMMIT_MESSAGE_LENGTH - '...'.length
+    : MAX_DISCORD_COMMIT_MESSAGE_LENGTH;
+
+  const discordTruncatedMessage = message.slice(0, truncatedMessageLength);
   // missing opening backtick if uneven count
   const isMissingClosingBacktick = Boolean(((discordTruncatedMessage.match(/`/g) ?? []).length) % 2);
 
