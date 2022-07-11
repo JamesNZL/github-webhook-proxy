@@ -1,5 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 
+import { formatCommitMessages } from '../../../lib/format-commit-messages';
+
 const GITHUB_WEBHOOK_HEADERS = [
   'user-agent',
   'content-type',
@@ -28,6 +30,8 @@ export default async function webhook(req: NextApiRequest, res: NextApiResponse)
       error: 'webhook_url must be a unique query parameter.',
     });
   }
+
+  req.body = formatCommitMessages(req.body);
 
   const githubHeaders = GITHUB_WEBHOOK_HEADERS.flatMap(header => {
     const reqHeader = req.headers[header];
