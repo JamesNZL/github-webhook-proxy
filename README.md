@@ -8,7 +8,7 @@ Discord truncates commit messages to a length of ~`50` characters, which often c
 Currently, this proxy applies the following transformations to commit messages:
 1. At the [`MAX_DISCORD_COMMIT_MESSAGE_LENGTH`](lib/format-commit-messages.ts), insert a closing <code>...`</code> if there is an uneven number of preceeding backticks.
 2. Replace recognised [gitmoji](https://github.com/carloscuesta/gitmoji/blob/master/src/data/gitmojis.json) codes (eg `:technologist:` 👨‍💻) with the actual emoji character.
-	> Discord does their message truncation calculations on the gitmoji code (but the actual emojis are rendered in the embed), which means long gitmoji codes result in lots of wasted space.
+	> Discord does their message truncation calculations with the gitmoji code, whilst the actual emojis are rendered in the embed. This means long gitmoji codes result in lots of wasted space.
 
 ### Before
 ![Before](public/before.jpg)
