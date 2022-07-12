@@ -65,7 +65,7 @@ function fixTruncatedInlineCode(message: string) {
     // add ZWSP between inserted closing/reopening backticks
     : discordTruncatedMessage.replace(/(.)$/, '`' + ZWSP + '`$1');
 
-  // close the last backtick
+  // apply fix
   return message.replace(discordTruncatedMessage, fixedTruncatedMessage);
 }
 
