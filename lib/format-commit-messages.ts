@@ -37,28 +37,30 @@ function hasCommits(body: NextApiRequest['body']): body is HasCommits {
 }
 
 const ZWSP = '​';
+const MAX_DISCORD_COMMIT_MESSAGE_LENGTH = 50;
 
 function isMissingClosingBacktick(message: string) {
   // missing opening backtick if uneven count
   return Boolean(((message.match(/`/g) ?? []).length) % 2);
 }
 
-/**
- * Fixes unclosed inline code backticks after Discord message truncation.
- */
-function fixTruncatedInlineCode(message: string) {
-  const MAX_DISCORD_COMMIT_MESSAGE_LENGTH = 50;
-
-  if (isMissingClosingBacktick(message)) message += '`';
-
-  // TODO: refactor out
+function truncateMessage(message: string) {
   const truncatedMessageLength = (Array.from(message).length > MAX_DISCORD_COMMIT_MESSAGE_LENGTH)
     ? MAX_DISCORD_COMMIT_MESSAGE_LENGTH - '...'.length
     : MAX_DISCORD_COMMIT_MESSAGE_LENGTH;
 
   // use Array.from() to 'properly' count emojis
   // Discord doesn't address grapheme groups, so we won't
-  const discordTruncatedMessage = Array.from(message).slice(0, truncatedMessageLength).join('');
+  return Array.from(message).slice(0, truncatedMessageLength).join('');
+}
+
+/**
+ * Fixes unclosed inline code backticks after Discord message truncation.
+ */
+function fixTruncatedInlineCode(message: string) {
+  if (isMissingClosingBacktick(message)) message += '`';
+
+  const discordTruncatedMessage = truncateMessage(message);
 
   if (!isMissingClosingBacktick(discordTruncatedMessage)) return message;
 
