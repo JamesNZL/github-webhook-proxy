@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 
-import { isMissingClosingBacktick, fixTruncatedInlineCode } from './fix-truncated-inline-code';
+import { isMissingClosingBacktick, truncateMessage, fixTruncatedInlineCode } from './fix-truncated-inline-code';
 
 const ZWSP = '​';
 
@@ -23,6 +23,89 @@ describe('#isMissingClosingBacktick', () => {
     ],
   )('returns whether a string has an even number of backticks', (string, expected) => {
     expect(isMissingClosingBacktick(string)).toBe(expected);
+  });
+});
+
+describe('#truncateMessage', () => {
+  it.each(
+    [
+      ['im short'],
+      ['im also short'],
+      [''],
+      ['🎨🧑‍💻🎨❌🔥'],
+      ['feat: :fire: woo!'],
+      ['X'.repeat(40)],
+      ['X'.repeat(41)],
+      ['X'.repeat(42)],
+      ['X'.repeat(43)],
+      ['X'.repeat(44)],
+      ['X'.repeat(45)],
+      ['X'.repeat(46)],
+      ['X'.repeat(47)],
+      ['X'.repeat(48)],
+      ['X'.repeat(49)],
+      ['X'.repeat(50)],
+    ],
+  )('ignores messages shorter than 50', string => {
+    expect(truncateMessage(string)).toBe(string);
+  });
+
+  it.each(
+    [
+      ['X'.repeat(51)],
+      ['X'.repeat(52)],
+      ['X'.repeat(53)],
+      ['X'.repeat(54)],
+      ['X'.repeat(55)],
+      ['X'.repeat(100)],
+      ['X'.repeat(200)],
+      ['X'.repeat(2000)],
+    ],
+  )('truncates messages longer than 50', string => {
+    expect(truncateMessage(string)).toBe(string.slice(0, 47));
+  });
+
+  it.each(
+    [
+      // length 3
+      ['🧑‍💻' + 'X'.repeat(45), '🧑‍💻' + 'X'.repeat(45)],
+      ['🧑‍💻' + 'X'.repeat(46), '🧑‍💻' + 'X'.repeat(46)],
+      ['🧑‍💻' + 'X'.repeat(47), '🧑‍💻' + 'X'.repeat(47)],
+      ['🧑‍💻' + 'X'.repeat(48), '🧑‍💻' + 'X'.repeat(44)],
+      ['🧑‍💻' + 'X'.repeat(49), '🧑‍💻' + 'X'.repeat(44)],
+      // length 1
+      ['🎨' + 'X'.repeat(45), '🎨' + 'X'.repeat(45)],
+      ['🎨' + 'X'.repeat(46), '🎨' + 'X'.repeat(46)],
+      ['🎨' + 'X'.repeat(47), '🎨' + 'X'.repeat(47)],
+      ['🎨' + 'X'.repeat(48), '🎨' + 'X'.repeat(48)],
+      ['🎨' + 'X'.repeat(49), '🎨' + 'X'.repeat(49)],
+      ['🎨' + 'X'.repeat(50), '🎨' + 'X'.repeat(46)],
+      ['🎨' + 'X'.repeat(51), '🎨' + 'X'.repeat(46)],
+      // length 1
+      ['🔥' + 'X'.repeat(45), '🔥' + 'X'.repeat(45)],
+      ['🔥' + 'X'.repeat(46), '🔥' + 'X'.repeat(46)],
+      ['🔥' + 'X'.repeat(47), '🔥' + 'X'.repeat(47)],
+      ['🔥' + 'X'.repeat(48), '🔥' + 'X'.repeat(48)],
+      ['🔥' + 'X'.repeat(49), '🔥' + 'X'.repeat(49)],
+      ['🔥' + 'X'.repeat(50), '🔥' + 'X'.repeat(46)],
+      ['🔥' + 'X'.repeat(51), '🔥' + 'X'.repeat(46)],
+      // length 2
+      ['⚡️' + 'X'.repeat(45), '⚡️' + 'X'.repeat(45)],
+      ['⚡️' + 'X'.repeat(46), '⚡️' + 'X'.repeat(46)],
+      ['⚡️' + 'X'.repeat(47), '⚡️' + 'X'.repeat(47)],
+      ['⚡️' + 'X'.repeat(48), '⚡️' + 'X'.repeat(48)],
+      ['⚡️' + 'X'.repeat(49), '⚡️' + 'X'.repeat(45)],
+      ['⚡️' + 'X'.repeat(50), '⚡️' + 'X'.repeat(45)],
+      // length 2
+      ['🔒️' + 'X'.repeat(45), '🔒️' + 'X'.repeat(45)],
+      ['🔒️' + 'X'.repeat(46), '🔒️' + 'X'.repeat(46)],
+      ['🔒️' + 'X'.repeat(47), '🔒️' + 'X'.repeat(47)],
+      ['🔒️' + 'X'.repeat(48), '🔒️' + 'X'.repeat(48)],
+      ['🔒️' + 'X'.repeat(49), '🔒️' + 'X'.repeat(45)],
+      ['🔒️' + 'X'.repeat(50), '🔒️' + 'X'.repeat(45)],
+    ],
+  )('works properly with emojis', (string, expected) => {
+    expect(truncateMessage(string)).toBe(expected);
   });
 });
 
