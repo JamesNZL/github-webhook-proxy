@@ -88,3 +88,27 @@ export function formatCommitMessages(body: NextApiRequest['body']) {
 
   return body;
 }
+
+if (import.meta.vitest) {
+  const { describe, it, expect } = import.meta.vitest;
+  describe('#resolveGitmojiToEmoji', () => {
+    it('resolves :technologist:', () => {
+      expect(resolveGitmojiToEmoji('feat: :technologist: remove file')).toContain('🧑‍💻');
+      expect(resolveGitmojiToEmoji('feat: :technologist: remove file')).not.toContain(':technologist:');
+    });
+
+    it('resolves :art:', () => {
+      expect(resolveGitmojiToEmoji('feat: :art: remove file')).toContain('🎨');
+      expect(resolveGitmojiToEmoji('feat: :art: remove file')).not.toContain(':art:');
+    });
+
+    it('resolves :fire:', () => {
+      expect(resolveGitmojiToEmoji('feat: :fire: remove file')).toContain('🔥');
+      expect(resolveGitmojiToEmoji('feat: :fire: remove file')).not.toContain(':fire:');
+    });
+
+    it('doesn\'t resolve :shrug:', () => {
+      expect(resolveGitmojiToEmoji('feat: :shrug: remove file')).toContain(':shrug:');
+    });
+  });
+}
