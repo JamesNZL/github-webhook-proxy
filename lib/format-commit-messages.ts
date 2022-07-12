@@ -49,6 +49,9 @@ function isMissingClosingBacktick(message: string) {
 function fixTruncatedInlineCode(message: string) {
   const MAX_DISCORD_COMMIT_MESSAGE_LENGTH = 50;
 
+  if (isMissingClosingBacktick(message)) message += '`';
+
+  // TODO: refactor out
   const truncatedMessageLength = (Array.from(message).length > MAX_DISCORD_COMMIT_MESSAGE_LENGTH)
     ? MAX_DISCORD_COMMIT_MESSAGE_LENGTH - '...'.length
     : MAX_DISCORD_COMMIT_MESSAGE_LENGTH;
