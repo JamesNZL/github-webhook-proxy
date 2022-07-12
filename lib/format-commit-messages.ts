@@ -32,10 +32,6 @@ interface Committer {
   username: string;
 }
 
-function hasCommits(body: NextApiRequest['body']): body is HasCommits {
-  return (body && 'commits' in body);
-}
-
 const ZWSP = '​';
 const MAX_DISCORD_COMMIT_MESSAGE_LENGTH = 50;
 
@@ -86,6 +82,10 @@ function resolveGitmojiToEmoji(message: string) {
   if (!gitmojiCode) return message;
 
   return message.replace(gitmojiCode, resolveGitmojiCode(gitmojiCode));
+}
+
+function hasCommits(body: NextApiRequest['body']): body is HasCommits {
+  return (body && 'commits' in body);
 }
 
 export function formatCommitMessages(body: NextApiRequest['body']) {
