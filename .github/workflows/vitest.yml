@@ -17,8 +17,8 @@ jobs:
       uses: actions/setup-node@v3
       with:
         node-version: '18.x'
-        cache: 'npm'
+        cache: 'yarn'
 
     - name: Test
-      run: npm ci
+      run: yarn install --frozen-lockfile
     - run: npm run test
