@@ -4,6 +4,28 @@ import { isMissingClosingBacktick, fixTruncatedInlineCode } from './fix-truncate
 
 const ZWSP = '​';
 
+describe('#isMissingClosingBacktick', () => {
+  it.each(
+    [
+      ['awdhuiawdh', false],
+      ['`', true],
+      ['awdiajwidi`awdiawidajwd', true],
+      ['im missing a backti`ck', true],
+      ['`im closed!`', false],
+      ['', false],
+      ['true`', true],
+      ['``', false],
+      ['string`2`false', false],
+      ['string`open`closed`open`closed`open', true],
+      ['string`open`closed`open`closed`open`', false],
+      ['string`open`closed`open', true],
+      ['string`open`closed`open`closed', false],
+    ],
+  )('returns whether a string has an even number of backticks', (string, expected) => {
+    expect(isMissingClosingBacktick(string)).toBe(expected);
+  });
+});
+
 describe('#fixTruncatedInlineCode', () => {
   it('ignores short commits', () => {
     expect(fixTruncatedInlineCode('feat: short commit')).toBe('feat: short commit');
