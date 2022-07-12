@@ -154,14 +154,14 @@ if (import.meta.vitest) {
         ['X'.repeat(45) + addBackticks('X'.repeat(2)), 'X'.repeat(45) + addBackticks('X'.repeat(2))],
         // <46>`<2>` = total length 50, not truncated
         ['X'.repeat(46) + addBackticks('X'.repeat(2)), 'X'.repeat(46) + addBackticks('X'.repeat(2))],
-        // <47>`<2>` = total length 51, truncated <47>`XX|` => <47>`X`|`X`
-        ['X'.repeat(47) + addBackticks('X'.repeat(2)), 'X'.repeat(47) + addBackticks('X') + ZWSP + addBackticks('X')],
-        // <48>`<2>` = total length 52, truncated <48>`X|X` => <48>  |`XX`
-        ['X'.repeat(48) + addBackticks('X'.repeat(2)), 'X'.repeat(48) + '  ' + addBackticks('XX')],
-        // <49>`<2>` = total length 53, truncated <49>`|XX` => <49> |`XX`
-        ['X'.repeat(49) + addBackticks('X'.repeat(2)), 'X'.repeat(49) + ' ' + addBackticks('XX')],
-        // <50>`<2>` = total length 54, truncated <50>|`XX` => <50>|`XX`
-        ['X'.repeat(50) + addBackticks('X'.repeat(2)), 'X'.repeat(50) + addBackticks('XX')],
+        // <47>`<2>` = total length 51, truncated <47>|`XX` => <47>|`XX`
+        ['X'.repeat(47) + addBackticks('X'.repeat(2)), 'X'.repeat(47) + addBackticks('XX')],
+        // <48>`<2>` = total length 52, truncated <48>`X|X` => <47>|X`XX`
+        ['X'.repeat(48) + addBackticks('X'.repeat(2)), 'X'.repeat(47) + 'X' + addBackticks('XX')],
+        // <49>`<2>` = total length 53, truncated <49>`|XX` => <47>|XX`XX`
+        ['X'.repeat(49) + addBackticks('X'.repeat(2)), 'X'.repeat(47) + 'XX' + addBackticks('XX')],
+        // <50>`<2>` = total length 54, truncated <50>|`XX` => <47>|XXX`XX`
+        ['X'.repeat(50) + addBackticks('X'.repeat(2)), 'X'.repeat(47) + 'XXX' + addBackticks('XX')],
       ],
     )('correctly truncates opening backticks', (message, expected) => {
       const fixed = fixTruncatedInlineCode(message);
