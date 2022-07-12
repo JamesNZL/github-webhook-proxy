@@ -36,6 +36,8 @@ function hasCommits(body: NextApiRequest['body']): body is HasCommits {
   return (body && 'commits' in body);
 }
 
+const ZWSP = '​';
+
 /**
  * Fixes unclosed inline code backticks after Discord message truncation.
  */
@@ -60,7 +62,8 @@ function fixTruncatedInlineCode(message: string) {
     ? discordTruncatedMessage.replace(/(`.?)$/, match => {
       return `${' '.repeat(match.length)}${match}`;
     })
-    : discordTruncatedMessage.replace(/(.)$/, '``$1');
+    // add ZWSP between inserted closing/reopening backticks
+    : discordTruncatedMessage.replace(/(.)$/, '`' + ZWSP + '`$1');
 
   // close the last backtick
   return message.replace(discordTruncatedMessage, fixedTruncatedMessage);
@@ -118,13 +121,13 @@ if (import.meta.vitest) {
         // total length 50, not truncated by Discord
         [addBackticks('X'.repeat(48)), addBackticks('X'.repeat(48))],
         // total length 51, truncated by Discord
-        [addBackticks('X'.repeat(49)), addBackticks('X'.repeat(45)) + addBackticks('X'.repeat(4))],
+        [addBackticks('X'.repeat(49)), addBackticks('X'.repeat(45)) + ZWSP + addBackticks('X'.repeat(4))],
         // total length 52, truncated by Discord
-        [addBackticks('X'.repeat(50)), addBackticks('X'.repeat(45)) + addBackticks('X'.repeat(5))],
+        [addBackticks('X'.repeat(50)), addBackticks('X'.repeat(45)) + ZWSP + addBackticks('X'.repeat(5))],
         // total length 53, truncated by Discord
-        [addBackticks('X'.repeat(51)), addBackticks('X'.repeat(45)) + addBackticks('X'.repeat(6))],
+        [addBackticks('X'.repeat(51)), addBackticks('X'.repeat(45)) + ZWSP + addBackticks('X'.repeat(6))],
         // total length 54, truncated by Discord
-        [addBackticks('X'.repeat(52)), addBackticks('X'.repeat(45)) + addBackticks('X'.repeat(7))],
+        [addBackticks('X'.repeat(52)), addBackticks('X'.repeat(45)) + ZWSP + addBackticks('X'.repeat(7))],
       ],
     )('correctly appends truncated backticks', (message, expected) => {
       const fixed = fixTruncatedInlineCode(message);
@@ -132,8 +135,7 @@ if (import.meta.vitest) {
       expect(fixed).toBe(expected);
 
       // must not contain ``
-      // TODO: add ZWSP between inserted closing/opening
-      // expect(fixed).not.toContain('``');
+      expect(fixed).not.toContain('``');
 
       // must have an even number of backticks in the first 50 characters
       const isMissingClosingBacktick = Boolean(((fixed.match(/`/g) ?? []).length) % 2);
@@ -153,7 +155,7 @@ if (import.meta.vitest) {
         // <46>`<2>` = total length 50, not truncated
         ['X'.repeat(46) + addBackticks('X'.repeat(2)), 'X'.repeat(46) + addBackticks('X'.repeat(2))],
         // <47>`<2>` = total length 51, truncated <47>`XX|` => <47>`X`|`X`
-        ['X'.repeat(47) + addBackticks('X'.repeat(2)), 'X'.repeat(47) + addBackticks('X') + addBackticks('X')],
+        ['X'.repeat(47) + addBackticks('X'.repeat(2)), 'X'.repeat(47) + addBackticks('X') + ZWSP + addBackticks('X')],
         // <48>`<2>` = total length 52, truncated <48>`X|X` => <48>  |`XX`
         ['X'.repeat(48) + addBackticks('X'.repeat(2)), 'X'.repeat(48) + '  ' + addBackticks('XX')],
         // <49>`<2>` = total length 53, truncated <49>`|XX` => <49> |`XX`
@@ -167,8 +169,7 @@ if (import.meta.vitest) {
       expect(fixed).toBe(expected);
 
       // must not contain ``
-      // TODO: add ZWSP between inserted closing/opening
-      // expect(fixed).not.toContain('``');
+      expect(fixed).not.toContain('``');
 
       // must have an even number of backticks in the first 50 characters
       const isMissingClosingBacktick = Boolean(((fixed.match(/`/g) ?? []).length) % 2);
