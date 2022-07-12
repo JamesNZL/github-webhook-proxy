@@ -219,6 +219,18 @@ if (import.meta.vitest) {
         ['whoops, `i forgot to close this', 'whoops, `i forgot to close this`'],
         // <10>`<36> = total length 47, not truncated
         ['X'.repeat(10) + '`' + 'X'.repeat(36), 'X'.repeat(10) + addBackticks('X'.repeat(36))],
+        // <11>`<36> = total length 47, not truncated
+        ['X'.repeat(11) + '`' + 'X'.repeat(36), 'X'.repeat(11) + addBackticks('X'.repeat(36))],
+        // <12>`<36> = total length 48, not truncated
+        ['X'.repeat(12) + '`' + 'X'.repeat(36), 'X'.repeat(12) + addBackticks('X'.repeat(36))],
+        // <13>`<36> = total length 49, not truncated
+        ['X'.repeat(13) + '`' + 'X'.repeat(36), 'X'.repeat(13) + addBackticks('X'.repeat(36))],
+        // <14>`<36> = total length 50, not truncated
+        ['X'.repeat(14) + '`' + 'X'.repeat(36), 'X'.repeat(14) + addBackticks('X'.repeat(36))],
+        // <15>`<36> = total length 51, truncated <15>`<30>`|`<6>`
+        ['X'.repeat(15) + '`' + 'X'.repeat(36), 'X'.repeat(15) + addBackticks('X'.repeat(30)) + ZWSP + addBackticks('X'.repeat(6))],
+        // <16>`<36> = total length 5, truncated <16>`<29>`|`<7>`
+        ['X'.repeat(16) + '`' + 'X'.repeat(36), 'X'.repeat(16) + addBackticks('X'.repeat(29)) + ZWSP + addBackticks('X'.repeat(7))],
         // <20>`<36> = total length 57, truncated <20>`<25>`|`<11>`
         ['X'.repeat(20) + '`' + 'X'.repeat(36), 'X'.repeat(20) + addBackticks('X'.repeat(25)) + ZWSP + addBackticks('X'.repeat(11))],
       ],
