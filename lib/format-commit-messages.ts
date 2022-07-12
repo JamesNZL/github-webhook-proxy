@@ -237,7 +237,7 @@ if (import.meta.vitest) {
         // <20>`<36> = total length 57, truncated <20>`<25>`|`<11>`
         ['X'.repeat(20) + '`' + 'X'.repeat(36), 'X'.repeat(20) + addBackticks('X'.repeat(25)) + ZWSP + addBackticks('X'.repeat(11))],
         // correctly closed backticks in the first 50 characters, but unclosed after that
-        ['X'.repeat(51) + '`' + 'X'.repeat(36), 'X'.repeat(75) + addBackticks('X'.repeat(36))],
+        ['X'.repeat(51) + '`' + 'X'.repeat(36), 'X'.repeat(51) + addBackticks('X'.repeat(36))],
       ],
     )('closes unclosed code blocks', (message, expected) => {
       const fixed = fixTruncatedInlineCode(message);
