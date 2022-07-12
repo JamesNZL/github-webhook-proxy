@@ -213,6 +213,27 @@ if (import.meta.vitest) {
       const isMissingClosingBacktick = Boolean(((fixed.match(/`/g) ?? []).length) % 2);
       expect(isMissingClosingBacktick).toBe(false);
     });
+
+    it.each(
+      [
+        ['whoops, `i forgot to close this', 'whoops, `i forgot to close this`'],
+        // <10>`<36> = total length 47, not truncated
+        ['X'.repeat(10) + '`' + 'X'.repeat(36), 'X'.repeat(10) + addBackticks('X'.repeat(36))],
+        // <20>`<36> = total length 57, truncated <20>`<25>`|`<11>`
+        ['X'.repeat(20) + '`' + 'X'.repeat(36), 'X'.repeat(20) + addBackticks('X'.repeat(25)) + ZWSP + addBackticks('X'.repeat(11))],
+      ],
+    )('closes unclosed code blocks', (message, expected) => {
+      const fixed = fixTruncatedInlineCode(message);
+
+      expect(fixed).toBe(expected);
+
+      // must not contain ``
+      expect(fixed).not.toContain('``');
+
+      // must have an even number of backticks in the first 50 characters
+      const isMissingClosingBacktick = Boolean(((fixed.match(/`/g) ?? []).length) % 2);
+      expect(isMissingClosingBacktick).toBe(false);
+    });
   });
 
   describe('#resolveGitmojiToEmoji', () => {
