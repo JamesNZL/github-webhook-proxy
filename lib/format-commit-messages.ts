@@ -175,6 +175,44 @@ if (import.meta.vitest) {
       const isMissingClosingBacktick = Boolean(((fixed.match(/`/g) ?? []).length) % 2);
       expect(isMissingClosingBacktick).toBe(false);
     });
+
+    it.each(
+      [
+        // <38>`<6>` = total length 46, not truncated
+        ['X'.repeat(38) + addBackticks('X'.repeat(6)), 'X'.repeat(38) + addBackticks('X'.repeat(6))],
+        // <39>`<6>` = total length 47 not truncated
+        ['X'.repeat(39) + addBackticks('X'.repeat(6)), 'X'.repeat(39) + addBackticks('X'.repeat(6))],
+        // <40>`<6>` = total length 48, not truncated
+        ['X'.repeat(40) + addBackticks('X'.repeat(6)), 'X'.repeat(40) + addBackticks('X'.repeat(6))],
+        // <41>`<6>` = total length 49, not truncated
+        ['X'.repeat(41) + addBackticks('X'.repeat(6)), 'X'.repeat(41) + addBackticks('X'.repeat(6))],
+        // <42>`<6>` = total length 50, not truncated
+        ['X'.repeat(42) + addBackticks('X'.repeat(6)), 'X'.repeat(42) + addBackticks('X'.repeat(6))],
+        // <43>`<6>` = total length 51, truncated <43>`XXX|XXX` => <43>`XX`|`XXXX`
+        ['X'.repeat(43) + addBackticks('X'.repeat(6)), 'X'.repeat(43) + addBackticks('XX') + ZWSP + addBackticks('XXXX')],
+        // <44>`<6>` = total length 52, truncated <44>`XX|XXXX` => <44>`X`|`XXXXX`
+        ['X'.repeat(44) + addBackticks('X'.repeat(6)), 'X'.repeat(44) + addBackticks('X') + ZWSP + addBackticks('XXXXX')],
+        // <45>`<6>` = total length 53, truncated <45>`X|XXXXX` => <45>  |`XXXXXX`
+        ['X'.repeat(45) + addBackticks('X'.repeat(6)), 'X'.repeat(45) + '  ' + addBackticks('XXXXXX')],
+        // <46>`<6>` = total length 54, truncated <46>`|XXXXXX` => <46> |`XXXXXX`
+        ['X'.repeat(46) + addBackticks('X'.repeat(6)), 'X'.repeat(46) + ' ' + addBackticks('XXXXXX')],
+        // <47>`<6>` = total length 55, truncated <47>|`XXXXXX` => <47>|`XXXXXX`
+        ['X'.repeat(47) + addBackticks('X'.repeat(6)), 'X'.repeat(47) + addBackticks('XXXXXX')],
+        // <48>`<6>` = total length 56, truncated <47>|X`XXXXXX` => <47>|X`XXXXXX`
+        ['X'.repeat(48) + addBackticks('X'.repeat(6)), 'X'.repeat(47) + 'X' + addBackticks('XXXXXX')],
+      ],
+    )('correctly truncates opening backticks', (message, expected) => {
+      const fixed = fixTruncatedInlineCode(message);
+
+      expect(fixed).toBe(expected);
+
+      // must not contain ``
+      expect(fixed).not.toContain('``');
+
+      // must have an even number of backticks in the first 50 characters
+      const isMissingClosingBacktick = Boolean(((fixed.match(/`/g) ?? []).length) % 2);
+      expect(isMissingClosingBacktick).toBe(false);
+    });
   });
 
   describe('#resolveGitmojiToEmoji', () => {
