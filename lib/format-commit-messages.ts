@@ -248,7 +248,7 @@ if (import.meta.vitest) {
       expect(fixed).not.toContain('``');
 
       // must have an even number of backticks in the first 50 characters
-      expect(isMissingClosingBacktick).toBe(false);
+      expect(isMissingClosingBacktick(fixed)).toBe(false);
     });
   });
 
