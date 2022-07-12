@@ -3,6 +3,7 @@
 		"lint",
 		"deps",
 		"readme",
-		"deps-dev"
+		"deps-dev",
+		"actions"
 	]
 }
