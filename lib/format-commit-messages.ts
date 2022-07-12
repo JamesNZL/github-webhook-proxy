@@ -38,6 +38,11 @@ function hasCommits(body: NextApiRequest['body']): body is HasCommits {
 
 const ZWSP = '​';
 
+function isMissingClosingBacktick(message: string) {
+  // missing opening backtick if uneven count
+  return Boolean(((message.match(/`/g) ?? []).length) % 2);
+}
+
 /**
  * Fixes unclosed inline code backticks after Discord message truncation.
  */
@@ -51,10 +56,8 @@ function fixTruncatedInlineCode(message: string) {
   // use Array.from() to 'properly' count emojis
   // Discord doesn't address grapheme groups, so we won't
   const discordTruncatedMessage = Array.from(message).slice(0, truncatedMessageLength).join('');
-  // missing opening backtick if uneven count
-  const isMissingClosingBacktick = Boolean(((discordTruncatedMessage.match(/`/g) ?? []).length) % 2);
 
-  if (!isMissingClosingBacktick) return message;
+  if (!isMissingClosingBacktick(discordTruncatedMessage)) return message;
 
   const fixedTruncatedMessage = (/`.?$/.test(discordTruncatedMessage))
     // if the unclosed backtick is the very last character or the second to last character, push it back with space(s)
@@ -138,8 +141,7 @@ if (import.meta.vitest) {
       expect(fixed).not.toContain('``');
 
       // must have an even number of backticks in the first 50 characters
-      const isMissingClosingBacktick = Boolean(((fixed.match(/`/g) ?? []).length) % 2);
-      expect(isMissingClosingBacktick).toBe(false);
+      expect(isMissingClosingBacktick(fixed)).toBe(false);
     });
 
     it.each(
@@ -172,8 +174,7 @@ if (import.meta.vitest) {
       expect(fixed).not.toContain('``');
 
       // must have an even number of backticks in the first 50 characters
-      const isMissingClosingBacktick = Boolean(((fixed.match(/`/g) ?? []).length) % 2);
-      expect(isMissingClosingBacktick).toBe(false);
+      expect(isMissingClosingBacktick(fixed)).toBe(false);
     });
 
     it.each(
@@ -210,8 +211,7 @@ if (import.meta.vitest) {
       expect(fixed).not.toContain('``');
 
       // must have an even number of backticks in the first 50 characters
-      const isMissingClosingBacktick = Boolean(((fixed.match(/`/g) ?? []).length) % 2);
-      expect(isMissingClosingBacktick).toBe(false);
+      expect(isMissingClosingBacktick(fixed)).toBe(false);
     });
 
     it.each(
@@ -243,7 +243,6 @@ if (import.meta.vitest) {
       expect(fixed).not.toContain('``');
 
       // must have an even number of backticks in the first 50 characters
-      const isMissingClosingBacktick = Boolean(((fixed.match(/`/g) ?? []).length) % 2);
       expect(isMissingClosingBacktick).toBe(false);
     });
   });
