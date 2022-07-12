@@ -14,20 +14,14 @@ interface Commit {
   message: string;
   timestamp: string;
   url: string;
-  author: Author;
-  committer: Committer;
+  author: User;
+  committer: User;
   added: string[];
   removed: string[];
   modified: string[];
 }
 
-interface Author {
-  name: string;
-  email: string;
-  username: string;
-}
-
-interface Committer {
+interface User {
   name: string;
   email: string;
   username: string;
