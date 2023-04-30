@@ -5,8 +5,8 @@ importers:
   .:
     dependencies:
       gitmojis:
-        specifier: ^3.12.0
-        version: 3.12.0
+        specifier: ^3.13.4
+        version: 3.13.4
       next:
         specifier: 13.3.2
         version: 13.3.2(react-dom@18.2.0)(react@18.2.0)
@@ -1527,9 +1527,8 @@ packages:
     resolution: {integrity: sha512-MjhiaIWCJ1sAU4pIQ5i5OfOuHHxVo1oYeNsWTON7jxYkod8pHocXeh+SSbmu5OZZZK73B6cbJ2XADzXehLyovQ==}
     dev: true
 
-  /gitmojis@3.12.0:
-    resolution: {integrity: sha512-07dBXkB1PZkOxs4BEJfcMCubWkNo34YEslGLMmnlkbIxtU7PqMjitUT1k73jpNrUck33LjXR1T7KEsoM5zBSbw==}
-    engines: {node: '16'}
+  /gitmojis@3.13.4:
+    resolution: {integrity: sha512-TRYhqnD36Xs9GHuATVRmo7hzBb+6wXYC0zxBFvLs3nma7N1WQGWW2vPTQ0+3GsGcPwSp0XVGfe3Besn4a6ip5Q==}
     dev: false
 
   /glob-parent@5.1.2:
