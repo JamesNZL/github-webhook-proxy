@@ -40,10 +40,15 @@ function hasCommits(body: NextApiRequest['body']): body is HasCommits {
 export function formatCommitMessages(body: NextApiRequest['body']) {
   if (!hasCommits(body)) return body;
 
+  const transformations = [resolveGitmojiToEmoji, fixTruncatedInlineCode];
+
   body.commits = body.commits.map(commit => {
-    commit.message = resolveGitmojiToEmoji(commit.message);
-    commit.message = fixTruncatedInlineCode(commit.message);
-    return commit;
+    const res = transformations.reduce((commit, transformation) => {
+      commit.message = transformation(commit.message);
+      return commit;
+    }, commit);
+
+    return res;
   });
 
   return body;
