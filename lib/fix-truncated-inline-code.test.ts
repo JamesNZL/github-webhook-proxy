@@ -152,8 +152,15 @@ describe('#fixTruncatedInlineCode', () => {
     // must not contain ``
     expect(fixed).not.toContain('``');
 
-    // must have an even number of backticks in the first 50 characters
+    // must have an even number of backticks in the entire message
     expect(isMissingClosingBacktick(fixed)).toBe(false);
+
+    // must have an even number of backticks in the truncated message
+    const truncated = (Array.from(fixed).length > 50)
+      ? Array.from(fixed).slice(0, 47).join('')
+      : Array.from(fixed).slice(0, 50).join('');
+
+    expect(isMissingClosingBacktick(truncated)).toBe(false);
   });
 
   it.each(
@@ -185,8 +192,15 @@ describe('#fixTruncatedInlineCode', () => {
     // must not contain ``
     expect(fixed).not.toContain('``');
 
-    // must have an even number of backticks in the first 50 characters
+    // must have an even number of backticks in the entire message
     expect(isMissingClosingBacktick(fixed)).toBe(false);
+
+    // must have an even number of backticks in the truncated message
+    const truncated = (Array.from(fixed).length > 50)
+      ? Array.from(fixed).slice(0, 47).join('')
+      : Array.from(fixed).slice(0, 50).join('');
+
+    expect(isMissingClosingBacktick(truncated)).toBe(false)
   });
 
   it.each(
@@ -222,8 +236,15 @@ describe('#fixTruncatedInlineCode', () => {
     // must not contain ``
     expect(fixed).not.toContain('``');
 
-    // must have an even number of backticks in the first 50 characters
+    // must have an even number of backticks in the entire message
     expect(isMissingClosingBacktick(fixed)).toBe(false);
+
+    // must have an even number of backticks in the truncated message
+    const truncated = (Array.from(fixed).length > 50)
+      ? Array.from(fixed).slice(0, 47).join('')
+      : Array.from(fixed).slice(0, 50).join('');
+
+    expect(isMissingClosingBacktick(truncated)).toBe(false)
   });
 
   it.each(
@@ -259,7 +280,14 @@ describe('#fixTruncatedInlineCode', () => {
     // must not contain ``
     expect(fixed).not.toContain('``');
 
-    // must have an even number of backticks in the first 50 characters
+    // must have an even number of backticks in the entire message
     expect(isMissingClosingBacktick(fixed)).toBe(false);
+
+    // must have an even number of backticks in the truncated message
+    const truncated = (Array.from(fixed).length > 50)
+      ? Array.from(fixed).slice(0, 47).join('')
+      : Array.from(fixed).slice(0, 50).join('');
+
+    expect(isMissingClosingBacktick(truncated)).toBe(false)
   });
 });
