@@ -42,3 +42,7 @@ Once the server is started, use a service such as [Ngrok](https://ngrok.com/) to
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+
+## Licence
+
+The source code of this repository is licenced under MIT.
