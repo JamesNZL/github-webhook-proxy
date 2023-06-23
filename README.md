@@ -45,4 +45,4 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/deploym
 
 ## Licence
 
-The source code of this repository is licenced under MIT.
+The source code of this repository is licensed under MIT.
