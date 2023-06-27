@@ -24,4 +24,4 @@ jobs:
 
     - name: Test
       run: pnpm install --frozen-lockfile
-    - run: npm run test
+    - run: pnpm run test
