@@ -6,8 +6,8 @@ settings:
 
 dependencies:
   gitmojis:
-    specifier: ^3.13.5
-    version: 3.13.5
+    specifier: ^3.14.0
+    version: 3.14.0
   next:
     specifier: 14.0.3
     version: 14.0.3(react-dom@18.2.0)(react@18.2.0)
@@ -1602,8 +1602,8 @@ packages:
     resolution: {integrity: sha512-MjhiaIWCJ1sAU4pIQ5i5OfOuHHxVo1oYeNsWTON7jxYkod8pHocXeh+SSbmu5OZZZK73B6cbJ2XADzXehLyovQ==}
     dev: true
 
-  /gitmojis@3.13.5:
-    resolution: {integrity: sha512-MLM88QAaWpYWlvtBjHBxshI9AGRH+LLluD6NbhymeWp0EQ1Sew8SgC0BpiQuQ4DCYGKs9LcX4zRL3lDlwOPA5g==}
+  /gitmojis@3.14.0:
+    resolution: {integrity: sha512-wPdXxKWfp2dJE6/ch8TDJjYdXvr+4uV67AEcbImj5QC4DmP6Byje1goJL8WgMPFnLY63eadK6oxtnSjdRFzS6g==}
     dev: false
 
   /glob-parent@5.1.2:
